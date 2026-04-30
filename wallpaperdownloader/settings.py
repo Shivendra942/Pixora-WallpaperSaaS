@@ -63,9 +63,19 @@ WSGI_APPLICATION = 'wallpaperdownloader.wsgi.application'
 
 
 
+#   'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#       'NAME': 'pixoradb',
+#        'USER': 'postgres',
+#        'PASSWORD': 'shiva12345',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
+        conn_max_age=600
     )
 }
 

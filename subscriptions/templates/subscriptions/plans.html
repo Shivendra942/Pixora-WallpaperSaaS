@@ -5,49 +5,59 @@
 <div class="container text-center">
     <h2>Choose Your Plan</h2>
 
-    <div style="display:flex; gap:30px; justify-content:center; margin-top:40px;">
+    <div style="display:flex; gap:30px; justify-content:center; margin-top:40px; flex-wrap:wrap;">
 
-        <!-- BASIC -->
+        {% for plan in plans %}
         <div class="card p-4">
-            <h3>Basic</h3>
-            <p>₹49 / month</p>
-            <button type="button" onclick="buyPlan(1)" class="btn btn-danger">
+            <h3>{{ plan.name }}</h3>
+            <p>₹{{ plan.price }} / month</p>
+
+            <!-- 🔥 IMPORTANT: data-id instead of inline JS -->
+            <button type="button"
+                    class="btn btn-danger subscribe-btn"
+                    data-id="{{ plan.id }}">
                 Subscribe
             </button>
         </div>
-
-        <!-- PRO -->
-        <div class="card p-4">
-            <h3>Pro</h3>
-            <p>₹99 / month</p>
-            <button type="button" onclick="buyPlan(2)" class="btn btn-dark">
-                Subscribe
-            </button>
-        </div>
+        {% empty %}
+            <p>No plans available</p>
+        {% endfor %}
 
     </div>
 </div>
 
-<!-- Razorpay Script -->
+<!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-// CSRF token helper
 function getCSRFToken() {
     return document.cookie.split('; ')
         .find(row => row.startsWith('csrftoken'))
         ?.split('=')[1];
 }
 
+// 🔥 Attach event listener (more reliable than onclick)
+document.querySelectorAll('.subscribe-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const planId = this.getAttribute('data-id');
+        buyPlan(planId);
+    });
+});
+
 function buyPlan(planId) {
 
-    console.log("Clicked plan:", planId);
+    console.log("👉 Sending plan:", planId);
 
     fetch(`/create-order/${planId}/`)
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Plan not found or server error");
+        }
+        return res.json();
+    })
     .then(data => {
 
-        console.log("Order Data:", data);
+        console.log("✅ Order Data:", data);
 
         var options = {
             key: data.key,
@@ -58,11 +68,6 @@ function buyPlan(planId) {
             name: "Wallpaper Premium",
             description: "Subscription Plan",
 
-            // 👉 force card (avoid UPI test issues)
-            method: {
-                card: true
-            },
-
             prefill: {
                 name: "{{ request.user.username|default:'User' }}",
                 email: "test@example.com",
@@ -70,7 +75,6 @@ function buyPlan(planId) {
             },
 
             handler: function (response) {
-                console.log("Payment success:", response);
 
                 fetch('/payment-success/', {
                     method: "POST",
@@ -82,7 +86,6 @@ function buyPlan(planId) {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    console.log("Backend response:", data);
 
                     if (data.status === "success") {
                         window.location.href = "/premium/";
@@ -90,18 +93,10 @@ function buyPlan(planId) {
                         alert("Payment verification failed");
                     }
                 })
-                .catch(err => {
-                    console.error("Error:", err);
+                .catch(() => {
                     alert("Error saving payment");
                 });
             },
-
-            modal: {
-                ondismiss: function () {
-                    console.log("Payment popup closed");
-                }
-            },
-
 
             theme: {
                 color: "#ff2e2e"
@@ -110,10 +105,9 @@ function buyPlan(planId) {
 
         var rzp = new Razorpay(options);
         rzp.open();
-
     })
     .catch(err => {
-        console.error("Error:", err);
+        console.error("❌ ERROR:", err);
         alert("Something went wrong. Check console.");
     });
 }

@@ -2,11 +2,30 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div class="profile-container">
 
-    <!-- 👤 HEADER -->
+    <!-- 👤 PROFILE HEADER -->
     <div class="profile-header">
-        <h2>👤 {{ user.username }}</h2>
+
+        <div class="profile-left">
+            {% if user.profile.image %}
+                <img src="{{ user.profile.image.url }}" class="profile-img">
+            {% else %}
+                <div class="profile-placeholder">No Image</div>
+            {% endif %}
+        </div>
+
+        <div class="profile-right">
+            <h2>{{ user.username }}</h2>
+
+            <!-- 🔥 UPLOAD FORM -->
+            <form method="POST" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+                <input type="file" name="image" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
     </div>
 
     <!-- 🔥 TABS -->
@@ -69,7 +88,6 @@
 
 </div>
 
-<!-- 🔥 JS FOR TABS -->
 <script>
 function openTab(tabName) {
 

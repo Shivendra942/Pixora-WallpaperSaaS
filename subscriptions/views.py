@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.decorators import login_required
@@ -11,7 +11,7 @@ import razorpay
 from .models import Subscription, Plan
 
 
-# 🔐 Razorpay client (define once)
+# Razorpay client
 client = razorpay.Client(
     auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
 )
@@ -35,31 +35,26 @@ def get_subscription(request):
     return None, 0
 
 
+# 🔥 CREATE ORDER (FIXED)
 @login_required
 def create_order(request, plan_id):
     try:
         print("👉 Requested plan_id:", plan_id)
 
-        # ✅ Check plan exists
-        plan = Plan.objects.filter(id=plan_id).first()
-        if not plan:
-            print("❌ Plan not found")
-            return JsonResponse({"error": "Plan not found"}, status=404)
+        # ✅ SAFE PLAN FETCH
+        plan = get_object_or_404(Plan, id=plan_id)
 
         print("✅ Plan:", plan.name, plan.price)
 
-        # ✅ Create Razorpay order
         order = client.order.create({
-            "amount": int(plan.price * 100),  # ₹ → paise
+            "amount": int(plan.price * 100),
             "currency": "INR",
             "payment_capture": 1
         })
 
-        print("✅ Order created:", order)
-
         return JsonResponse({
-            "order_id": order.get("id"),
-            "amount": order.get("amount"),
+            "order_id": order["id"],
+            "amount": order["amount"],
             "key": settings.RAZORPAY_KEY_ID
         })
 
@@ -68,7 +63,7 @@ def create_order(request, plan_id):
         return JsonResponse({"error": str(e)}, status=500)
 
 
-# 💰 PAYMENT SUCCESS (with verification)
+# 🔥 PAYMENT SUCCESS
 @csrf_exempt
 @login_required
 def payment_success(request):
@@ -81,21 +76,18 @@ def payment_success(request):
     signature = request.POST.get("razorpay_signature")
     plan_id = request.POST.get("plan_id")
 
-    # 🔎 Debug logs (optional but useful)
-    print("PAYMENT DATA:", payment_id, order_id, signature, plan_id)
-
     try:
-        # 🔐 VERIFY PAYMENT SIGNATURE
+        # VERIFY SIGNATURE
         client.utility.verify_payment_signature({
             "razorpay_payment_id": payment_id,
             "razorpay_order_id": order_id,
             "razorpay_signature": signature
         })
 
-        # ✅ Get plan
-        plan = Plan.objects.get(id=plan_id)
+        # GET PLAN SAFELY
+        plan = get_object_or_404(Plan, id=plan_id)
 
-        # ✅ Save subscription
+        # SAVE SUBSCRIPTION
         Subscription.objects.update_or_create(
             user=request.user,
             defaults={
@@ -108,9 +100,6 @@ def payment_success(request):
 
         return JsonResponse({"status": "success"})
 
-    except Plan.DoesNotExist:
-        return JsonResponse({"status": "failed", "error": "Invalid plan"}, status=400)
-
     except razorpay.errors.SignatureVerificationError:
         return JsonResponse({"status": "failed", "error": "Signature mismatch"}, status=400)
 
@@ -118,7 +107,13 @@ def payment_success(request):
         return JsonResponse({"status": "failed", "error": str(e)}, status=500)
 
 
-# 🧾 Manual subscribe (fallback/testing)
+# 📄 PLANS PAGE (FIXED)
+def plans(request):
+    plans = Plan.objects.all()
+    return render(request, 'subscriptions/plans.html', {
+        'plans': plans
+    })
+
 @login_required
 def subscribe(request):
     Subscription.objects.update_or_create(
@@ -130,8 +125,3 @@ def subscribe(request):
         }
     )
     return redirect('premium')
-
-
-# 📄 Plans page
-def plans(request):
-    return render(request, 'subscriptions/plans.html')
