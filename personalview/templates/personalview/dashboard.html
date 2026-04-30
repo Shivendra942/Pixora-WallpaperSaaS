@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>📊 Admin Analytics</h2>
+
+    <!-- 🔥 CARDS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>{{ total_users }}</h3>
+            <p>Users</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_wallpapers }}</h3>
+            <p>Wallpapers</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>{{ total_downloads }}</h3>
+            <p>Downloads</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>₹{{ total_revenue }}</h3>
+            <p>Revenue</p>
+        </div>
+
+    </div>
+
+    <!-- 📈 CHARTS -->
+    <canvas id="downloadsChart"></canvas>
+    <canvas id="revenueChart" style="margin-top:30px;"></canvas>
+
+</div>
+
+<!-- 🔥 CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = {{ labels|safe }};
+const downloadsData = {{ downloads_data|safe }};
+const revenueData = {{ revenue_data|safe }};
+
+// 📥 Downloads Chart
+new Chart(document.getElementById('downloadsChart'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Downloads',
+            data: downloadsData
+        }]
+    }
+});
+
+// 💰 Revenue Chart
+new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Revenue',
+            data: revenueData
+        }]
+    }
+});
+</script>
+
+{% endblock %}

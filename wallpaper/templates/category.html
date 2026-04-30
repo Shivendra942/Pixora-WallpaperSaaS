@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1>{{ category.name }}</h1>
+
+    <div class="grid">
+        {% for wallpaper in wallpapers %}
+            <div class="card">
+                <img src="{{ wallpaper.image.url }}">
+
+                <div class="overlay">
+                    <h3>{{ wallpaper.title }}</h3>
+                    <a href="{% url 'download' wallpaper.id %}" class="download-btn">
+                        Download
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No wallpapers in this category.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

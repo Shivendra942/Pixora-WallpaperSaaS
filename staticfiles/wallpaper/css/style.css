@@ -1,0 +1,283 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+/* ================= NAVBAR (GLASS) ================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  background: rgba(17, 17, 17, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LOGO */
+.logo {
+  color: #ff2e2e;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  text-shadow: 0 0 10px #ff2e2e;
+}
+
+/* SEARCH */
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar input {
+  width: 350px;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-bar input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 10px rgba(255, 46, 46, 0.4);
+}
+
+/* NAV RIGHT */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* NAV LINKS */
+.nav-right a {
+  position: relative;
+  color: #bbb;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+/* underline animation */
+.nav-right a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background: #ff2e2e;
+  transition: 0.3s;
+}
+
+.nav-right a:hover {
+  color: #fff;
+}
+
+.nav-right a:hover::after {
+  width: 100%;
+}
+
+/* ================= PROFILE ================= */
+.profile-menu {
+  position: relative;
+}
+
+/* ICON CONTAINER */
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #ff2e2e;
+  transition: 0.3s;
+}
+
+.profile-icon:hover {
+  box-shadow: 0 0 12px #ff2e2e;
+  transform: scale(1.05);
+}
+
+/* IMAGE */
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  background: rgba(17, 17, 17, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid #333;
+  border-radius: 8px;
+
+  display: none;
+  min-width: 180px;
+  z-index: 100;
+
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.dropdown.show {
+  display: block;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* USERNAME */
+.dropdown .username {
+  padding: 10px;
+  font-size: 14px;
+  color: #aaa;
+  border-bottom: 1px solid #222;
+}
+
+/* LINKS */
+.dropdown a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
+}
+
+.dropdown a:hover {
+  background: rgba(255, 46, 46, 0.15);
+}
+
+/* ================= MAIN ================= */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px;
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+/* CARD */
+.card {
+  background: #121212;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+/* IMAGE (ONLY FOR CARDS) */
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* CONTENT */
+.overlay {
+  padding: 12px;
+}
+
+.overlay h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* BUTTON */
+.download-btn {
+  background: #ff2e2e;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.download-btn:hover {
+  background: #ff4d4d;
+}
+
+/* ================= CATEGORY ================= */
+.category-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.category-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.category-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+}
+
+/* ================= DETAIL PAGE ================= */
+.detail-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.detail-img img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.detail-info h2 {
+  margin-bottom: 10px;
+}
+
+.detail-info p {
+  color: #ccc;
+  margin-bottom: 10px;
+}

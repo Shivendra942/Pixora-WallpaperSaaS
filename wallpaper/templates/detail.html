@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <div style="display:flex; gap:40px; flex-wrap:wrap;">
+
+        <!-- IMAGE -->
+        <div style="flex:1; min-width:300px;">
+            <img src="{{ wallpaper.image.url }}" 
+                 style="width:100%; border-radius:10px; box-shadow:0 0 20px rgba(255,0,0,0.2);">
+        </div>
+
+        <!-- INFO -->
+        <div style="flex:1; min-width:300px;">
+
+            <h2 style="margin-bottom:10px;">{{ wallpaper.title }}</h2>
+
+            <p><strong style="color:#ff3b3b;">Category:</strong> {{ wallpaper.category.name }}</p>
+
+            <p><strong style="color:#ff3b3b;">Downloads:</strong> {{ wallpaper.downloads }}</p>
+
+            <p style="margin-top:10px; color:#ccc;">
+                {{ wallpaper.description }}
+            </p>
+
+            <br>
+
+            {% if wallpaper.is_paid %}
+            <a href="{% url 'buy' wallpaper.id %}" class="download-btn">
+            Buy ₹{{ wallpaper.price }}
+            </a>
+            {% else %}
+            <a href="{% url 'download' wallpaper.id %}" class="download-btn">
+              Download
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

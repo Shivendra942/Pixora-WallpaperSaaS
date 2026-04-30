@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- 👤 HEADER -->
+    <div class="profile-header">
+        <h2>👤 {{ user.username }}</h2>
+    </div>
+
+    <!-- 🔥 TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('purchases')">📥 Purchases</button>
+        <button class="tab-btn" onclick="openTab('likes')">❤️ Likes</button>
+        <button class="tab-btn" onclick="openTab('subscription')">💎 Subscription</button>
+    </div>
+
+    <!-- 📥 PURCHASES -->
+    <div id="purchases" class="tab-content active">
+        <h3>Your Purchases</h3>
+
+        <div class="grid">
+            {% for item in purchases %}
+                <div class="card">
+                    <img src="{% url 'serve_wallpaper' item.wallpaper.id %}">
+                </div>
+            {% empty %}
+                <p>No purchases yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ❤️ LIKES -->
+    <div id="likes" class="tab-content">
+        <h3>Your Likes</h3>
+
+        <div class="grid">
+            {% for like in likes %}
+                <div class="card">
+                    <img src="{% url 'serve_wallpaper' like.wallpaper.id %}">
+                </div>
+            {% empty %}
+                <p>No liked wallpapers.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 💎 SUBSCRIPTION -->
+    <div id="subscription" class="tab-content">
+        <h3>Subscription Details</h3>
+
+        {% if subscription %}
+            <p><strong>Plan:</strong> {{ subscription.plan.name }}</p>
+            <p><strong>Status:</strong> {{ status }}</p>
+            <p><strong>Expires:</strong> {{ subscription.expiry }}</p>
+
+            {% if status == "Active" %}
+                <p><strong>Days left:</strong> {{ days_left }} days</p>
+            {% endif %}
+        {% else %}
+            <p>No active subscription</p>
+        {% endif %}
+
+        <a href="{% url 'plans' %}" class="upgrade-btn">
+            💎 Upgrade Plan
+        </a>
+    </div>
+
+</div>
+
+<!-- 🔥 JS FOR TABS -->
+<script>
+function openTab(tabName) {
+
+    document.querySelectorAll(".tab-content").forEach(el => {
+        el.classList.remove("active");
+    });
+
+    document.querySelectorAll(".tab-btn").forEach(el => {
+        el.classList.remove("active");
+    });
+
+    document.getElementById(tabName).classList.add("active");
+    event.target.classList.add("active");
+}
+</script>
+
+{% endblock %}

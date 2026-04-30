@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Explore Wallpapers</h1>
+
+    <div class="grid">
+        {% for wallpaper in page_obj %}
+            <div class="card">
+
+                <!-- ✅ FIXED IMAGE -->
+                <img src="{% url 'serve_wallpaper' wallpaper.id %}" 
+                     class="{% if wallpaper.is_paid %}blur-img{% endif %}">
+
+                <!-- 🔒 PREMIUM OVERLAY -->
+                {% if wallpaper.is_paid %}
+                    <div class="premium-overlay">
+                        🔒 Premium
+                    </div>
+                {% endif %}
+
+                <!-- 🔥 CONTENT OVERLAY -->
+                <div class="overlay">
+                    <h3>{{ wallpaper.title }}</h3>
+
+                    <div class="card-actions">
+
+                        <!-- ❤️ LIKE -->
+                        <div class="like-section">
+                            <a href="#" class="like-btn" data-id="{{ wallpaper.id }}">
+                                {% if wallpaper.id in liked_wallpapers %}
+                                    ❤️
+                                {% else %}
+                                    🤍
+                                {% endif %}
+                            </a>
+
+                            <span class="like-count" id="like-count-{{ wallpaper.id }}">
+                                {{ wallpaper.like_set.count }}
+                            </span>
+                        </div>
+
+                        <!-- 👁 VIEW -->
+                        <a href="{% url 'detail' wallpaper.id %}" class="view-btn">
+                            View
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        {% empty %}
+            <p>No wallpapers available.</p>
+        {% endfor %}
+    </div>
+
+    <!-- ✅ PAGINATION -->
+    <div style="text-align:center; margin-top:30px;">
+
+        {% if page_obj.has_previous %}
+            <a href="?sort={{ request.GET.sort }}&page={{ page_obj.previous_page_number }}" class="download-btn">
+                ⬅ Previous
+            </a>
+        {% endif %}
+
+        <span style="margin: 0 15px;">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?sort={{ request.GET.sort }}&page={{ page_obj.next_page_number }}" class="download-btn">
+                Next ➡
+            </a>
+        {% endif %}
+
+    </div>
+
+    <!-- 🔥 PREMIUM SECTION -->
+    <div style="margin-top:60px;">
+
+        <h2>🔥 Premium Wallpapers</h2>
+        <p>Unlock high-quality exclusive wallpapers</p>
+
+        <div class="grid">
+            {% for wallpaper in premium_wallpapers %}
+                <div class="card">
+
+                    <img src="{% url 'serve_wallpaper' wallpaper.id %}" class="blur-img">
+
+                    <div class="premium-overlay">
+                        🔒 Premium
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <a href="{% url 'premium' %}" class="view-btn">
+                View Premium →
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

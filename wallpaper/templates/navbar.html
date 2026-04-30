@@ -1,0 +1,59 @@
+<div class="navbar">
+    <div class="nav-left">
+        <a href="/" class="logo">PIXORA</a>
+    </div>
+
+    
+
+    <div class="nav-center">
+        <form class="search-bar" method="GET" action="/">
+            <input type="text" name="q" placeholder="Search wallpapers..." value="{{ request.GET.q }}">
+        </form>
+    </div>
+
+    <div class="nav-right">
+
+        {% if is_premium %}
+         <span class="premium-badge-nav">PRO</span>
+        {% endif %}
+        {% if user.is_superuser %}
+        <a href="{% url 'admin_dashboard' %}">🛠 Admin</a>
+        {% endif %}
+        <a href="{% url 'premium' %}">Premium</a> 
+        <a href="/">Home</a>
+        <a href="/?sort=popular" 
+       class="{% if request.GET.sort == 'popular' %}active{% endif %}">
+        🔥 Popular
+        </a>
+        <a href="{% url 'categories' %}">Categories</a>
+
+        {% if user.is_authenticated %}
+
+            <div class="profile-menu">
+                
+                <!-- PROFILE IMAGE (SAFE VERSION) -->
+                <div class="profile-icon" onclick="toggleMenu()">
+                    {% if request.user.profile.image %}
+                        <img src="{{ request.user.profile.image.url }}" class="profile-img">
+                    {% else %}
+                        <img src="/media/default.jpg" class="profile-img">
+                    {% endif %}
+                </div>
+
+                <!-- DROPDOWN -->
+                <div id="dropdown" class="dropdown">
+                    <p class="username">Hi, {{ user.username }}</p>
+                    <a href="{% url 'profile' %}">My Profile</a>
+                    <a href="{% url 'profile' %}">My Purchases</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+
+            </div>
+
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+
+    </div>
+</div>

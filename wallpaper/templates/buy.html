@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <h1>Buy Wallpaper</h1>
+
+    <div style="text-align:center;">
+        <img src="{{ wallpaper.image.url }}" style="width:300px;">
+        <h2>{{ wallpaper.title }}</h2>
+        <p>₹{{ wallpaper.price }}</p>
+
+        <button id="pay-btn" class="download-btn">Pay Now</button>
+    </div>
+
+</div>
+
+<!-- ✅ Hidden form for secure POST -->
+<form id="payment-form" method="POST" action="{% url 'payment_success' %}">
+    {% csrf_token %}
+    <input type="hidden" name="razorpay_payment_id" id="payment_id">
+    <input type="hidden" name="razorpay_order_id" id="order_id">
+    <input type="hidden" name="razorpay_signature" id="signature">
+    <input type="hidden" name="wallpaper_id" value="{{ wallpaper.id }}">
+</form>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ wallpaper.price|floatformat:0 }}00",
+    "currency": "INR",
+    "name": "Wallpaper Store",
+    "description": "{{ wallpaper.title }}",
+    "order_id": "{{ order_id }}",
+
+    "handler": function (response){
+        // ✅ Fill hidden form
+        document.getElementById('payment_id').value = response.razorpay_payment_id;
+        document.getElementById('order_id').value = response.razorpay_order_id;
+        document.getElementById('signature').value = response.razorpay_signature;
+
+        // ✅ Submit securely to backend
+        document.getElementById('payment-form').submit();
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('pay-btn').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock %}

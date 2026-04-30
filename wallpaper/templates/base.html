@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Wallpapers{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'wallpaper/css/style.css' %}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+{% include 'navbar.html' %}
+{% if user.is_authenticated and days_left <= 3 %}
+<div class="alert alert-warning text-center">
+    ⚠️ Your subscription expires in {{ days_left }} days
+</div>
+{% endif %}
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}alert-success
+            {% elif message.tags == 'error' %}alert-danger
+            {% else %}alert-info
+            {% endif %}
+            alert-dismissible fade show shadow" role="alert">
+
+            {{ message }}
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- ================= PAGE CONTENT ================= -->
+{% block content %}
+{% endblock %}
+
+<!-- ================= JS ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // ================= PROFILE DROPDOWN =================
+    window.toggleMenu = function() {
+        const menu = document.getElementById("dropdown");
+        if (menu) menu.classList.toggle("show");
+    };
+
+    window.addEventListener("click", function(e) {
+        if (!e.target.closest('.profile-menu')) {
+            const dropdown = document.getElementById("dropdown");
+            if (dropdown) dropdown.classList.remove("show");
+        }
+    });
+
+    // ================= LIKE BUTTON =================
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const wallpaperId = this.dataset.id;
+            const countEl = document.getElementById(`like-count-${wallpaperId}`);
+
+            fetch(`/like/${wallpaperId}/`)
+            .then(res => {
+                if (res.status === 401) {
+                    window.location.href = "/accounts/login/";
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                this.innerHTML = data.liked ? '❤️' : '🤍';
+                if (countEl) countEl.innerText = data.count;
+
+                this.classList.add('animate');
+                setTimeout(() => this.classList.remove('animate'), 300);
+            });
+        });
+    });
+
+    // ================= BASIC PROTECTION =================
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    document.querySelectorAll("img").forEach(img => {
+        img.setAttribute("draggable", "false");
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 's') e.preventDefault();
+    });
+
+});
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= AUTO HIDE MESSAGES ================= -->
+<script>
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+        el.style.display = 'none';
+    });
+}, 3000);
+</script>
+{% if not is_premium %}
+<a href="{% url 'plans' %}" class="upgrade-float">
+    💎 Upgrade
+</a>
+{% endif %}
+
+
+</body>
+</html>

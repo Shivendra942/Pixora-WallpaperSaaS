@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+     <!-- 🔥 PLACE IT HERE -->
+    {% if not has_subscription %}
+    <div class="premium-banner">
+        <h2>🔥 Unlock Premium Wallpapers</h2>
+        <p>HD • No watermark • Exclusive collection</p>
+
+        <a href="{% url 'plans' %}" class="upgrade-btn">
+            💎 Upgrade Now
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="grid">
+    {% for wallpaper in wallpapers %}
+        <div class="card">
+
+            <!-- 🔥 IMAGE -->
+            <img src="{% url 'serve_wallpaper' wallpaper.id %}" 
+                 class="{% if not has_subscription %}blur-img{% endif %}">
+
+            <!-- 🔒 LOCK OVERLAY -->
+            {% if not has_subscription %}
+                <div class="premium-overlay">
+                    🔒 Premium
+                </div>
+            {% endif %}
+
+            <!-- 👁 VIEW BUTTON -->
+            <div class="overlay">
+                <h3>{{ wallpaper.title }}</h3>
+
+                {% if has_subscription %}
+                    <a href="{% url 'detail' wallpaper.id %}" class="view-btn">
+                        View
+                    </a>
+                {% else %}
+                    <a href="{% url 'plans' %}" class="view-btn">
+                        Unlock 🔥
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %}

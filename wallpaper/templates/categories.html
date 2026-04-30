@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Categories</h1>
+
+    <div class="grid">
+        {% for item in data %}
+            <a href="{% url 'category' item.category.slug %}" class="card">
+                
+                {% if item.image %}
+                    <img src="{{ item.image }}">
+                {% endif %}
+
+                <div class="overlay">
+                    <h3>{{ item.category.name }}</h3>
+                </div>
+
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
