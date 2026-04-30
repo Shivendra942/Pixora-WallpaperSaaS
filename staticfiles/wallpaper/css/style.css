@@ -281,3 +281,336 @@ h1 {
   color: #ccc;
   margin-bottom: 10px;
 }
+
+.like-btn {
+  font-size: 18px;
+  text-decoration: none;
+  margin-right: 10px;
+  transition: 0.2s;
+}
+
+.like-btn:hover {
+  transform: scale(1.2);
+}
+
+.like-btn {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.like-btn:active {
+  transform: scale(1.3);
+}
+
+.like-btn {
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+.like-btn.animate {
+  transform: scale(1.4);
+}
+
+.like-btn.animate::after {
+  content: "💥";
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 14px;
+  animation: burst 0.5s ease forwards;
+}
+
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1.5);
+  }
+}
+
+.card img {
+  pointer-events: none;
+}
+
+/* ACTION ROW */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* LIKE SECTION */
+.like-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.view-btn {
+  background: red !important;
+}
+
+.view-btn {
+  position: relative;
+  padding: 6px 16px;
+  border-radius: 20px;
+
+  font-size: 12px;
+  text-decoration: none;
+  color: white;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  transition: all 0.3s ease;
+}
+
+/* 🔥 HOVER EFFECT */
+.view-btn:hover {
+  background: #ff2e2e;
+  border-color: #ff2e2e;
+
+  box-shadow: 0 0 12px rgba(255, 46, 46, 0.6);
+
+  transform: translateY(-2px);
+}
+
+/* ✨ SUBTLE GLOW ANIMATION */
+.view-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+
+  background: radial-gradient(circle, rgba(255, 46, 46, 0.4), transparent);
+  opacity: 0;
+
+  transition: 0.3s;
+}
+
+.view-btn:hover::after {
+  opacity: 1;
+}
+
+.card {
+  position: relative;
+}
+
+.premium-badge {
+  background: #ff2e2e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* BLUR EFFECT */
+.blur-img {
+  filter: blur(6px);
+}
+
+/* PREMIUM OVERLAY */
+.premium-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+/* IMPORTANT */
+.card {
+  position: relative;
+}
+
+.premium-badge-nav {
+  background: linear-gradient(45deg, gold, orange);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-left: 10px;
+  color: black;
+  font-weight: bold;
+}
+
+/* 🔥 FLOATING UPGRADE BUTTON */
+.upgrade-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  background: linear-gradient(45deg, #ff2e2e, #ff6a00);
+  color: white;
+
+  padding: 12px 18px;
+  border-radius: 30px;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+
+  box-shadow: 0 5px 15px rgba(255, 46, 46, 0.4);
+
+  z-index: 999;
+  transition: 0.3s;
+}
+
+/* 🔥 HOVER EFFECT */
+.upgrade-float:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 46, 46, 0.6);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 46, 46, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 46, 46, 0);
+  }
+}
+
+.upgrade-float {
+  animation: pulse 2s infinite;
+}
+
+.blur-img {
+  filter: blur(8px);
+  transition: 0.3s;
+}
+
+.card:hover .blur-img {
+  filter: blur(5px);
+}
+
+.premium-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.premium-banner {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.upgrade-btn {
+  background: linear-gradient(45deg, red, orange);
+  padding: 10px 20px;
+  border-radius: 20px;
+  color: white;
+  text-decoration: none;
+}
+
+.card {
+  background: #111;
+  color: white;
+  border-radius: 10px;
+}
+
+/* DASHBOARD */
+.dashboard-container {
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+/* HEADER */
+.profile-header {
+  margin-bottom: 20px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  background: #222;
+  color: white;
+  border-radius: 6px;
+}
+
+.tab-btn.active {
+  background: #ff2e2e;
+}
+
+/* CONTENT */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* CARDS */
+.card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* BUTTON */
+.upgrade-btn {
+  display: inline-block;
+  margin-top: 15px;
+  background: linear-gradient(45deg, red, orange);
+  padding: 10px 20px;
+  border-radius: 20px;
+  color: white;
+  text-decoration: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: #111;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}

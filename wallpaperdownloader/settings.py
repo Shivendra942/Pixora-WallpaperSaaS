@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-
+import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,12 +61,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wallpaperdownloader.wsgi.application'
 
-# DATABASE
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+    )
 }
 
 # PASSWORD VALIDATION
@@ -85,11 +86,6 @@ USE_TZ = True
 # STATIC FILES (CSS, JS)
 STATIC_URL = '/static/'
 
-# IMPORTANT:
-# Do NOT overcomplicate this for development
-# Django will automatically detect static inside apps
-
-# Only needed for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # MEDIA FILES (IMAGES)
