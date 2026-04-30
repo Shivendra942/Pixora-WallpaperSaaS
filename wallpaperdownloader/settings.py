@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 SECRET_KEY = 'django-insecure-7eav#c2(hm=*s62c46#oi478r)(ahto0$#7f@aiwsnl7=y85%8'
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["web-production-18df6.up.railway.app"]
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -109,7 +109,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6
 }
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+    "https://web-production-18df6.up.railway.app"
+]
 RAZORPAY_KEY_ID = "rzp_test_SjkKwlglE41W5S"
 RAZORPAY_KEY_SECRET = "BCVTXtkVOOXy348RgvtUJb61"
 
